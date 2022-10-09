@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TUGAS 4</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Dosis');
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Dosis';
+    }
+    html, body{
+        height: 100vh;
+        background-color: #002B5B;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+    .container{
+        width: 100%;
+        padding: 1em;
+        display: flex;
+        gap: 15px;
+    }
+    h1,h4{
+        color: #fcfcfc;
+    }
+    .row-soal{
+        width: max-content;
+        background-color: #fcfcfc;
+        padding: 1em;
+        border-radius: 10px;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        row-gap: 15px;
+    }
+    .row-input{
+        width: max-content;
+        background-color: #fcfcfc;
+        padding: 1em;
+        border-radius: 10px;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        row-gap: 15px;
+    }
+    label{
+        font-weight: bold;
+        font-size: 18px;
+        margin-right: 1em;
+    }
+    input{
+        width: 70px;
+        outline: none;
+        padding: 5px 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 18px;
+        text-align: center;
+    }
+    input:focus{
+        border: 1px solid #256D85;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button{
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number]{
+        -moz-appearance: textfield;
+    }
+    button{
+        background-color: #256D85;
+        color: #fcfcfc;
+        border: 1px solid transparent;
+        font-size: 18px;
+        padding: 10px;
+        border-radius: 10px;
+        transition: 0.5s;
+    }
+    button:hover{
+        cursor: pointer;
+        background-color: #3c8da8;
+        transform: scale(1.02);
+    }
+
+    .row-step{
+        position: absolute;
+        background-color: #fcfcfc;
+        padding: 1em;
+        border-radius: 10px;
+        overflow: auto;
+        display: flex;
+        opacity: 0;
+        flex-direction: column;
+        row-gap: 15px;
+        transition: 1.5s;
+    }
+    p{
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .hasil-y,
+    .hasil-x{
+        background-color: #8FE3CF;
+        font-size:28px;
+        padding-left:5px;
+    }
+    .hasil-z{
+        background-color: #17D7A0;
+        font-size:28px;
+        padding-left:5px;
+    }
+    span{
+        width: 5px;
+        height: 5px;
+        background-color: #fcfcfc;
+        display: inline-block;
+        border-radius: 50%;
+    }
+    @media (max-width: 600px){
+        .container{
+            flex-direction: column;
+        }
+    }
+</style>
+<body>
+    <h1>Linear Programming</h1>
+    <div class="row-soal">
+        <h3>Soal</h3>
+        <p>Harga 9 buku tulis dan 4 pensil seharga 300 ribu</p>
+        <p>Harga 3 buku tulis dan 5 pensil seharga 250 ribu</p>
+        <p>Berapa harga 8 buku tulis dan 3 pensil</p>
+    </div>
+    <div class="container">
+        <div class="row-input">
+            <h3>Diket :</h3>
+            <div class="persamaan-1">
+                <input type="number" id="x1" autocomplete="off">
+                <label for="x1">x</label>
+                <label for="">+</label>
+                <input type="number" id="y1" autocomplete="off">
+                <label for="y1">y</label>
+    
+                <label for="total1">=</label>
+                <input type="number" id="total1" autocomplete="off">
+            </div>
+            <div class="persamaan-2">
+                <input type="number" id="x2" autocomplete="off">
+                <label for="x2">x</label>
+                <label for="">+</label>
+                <input type="number" id="y2" autocomplete="off">
+                <label for="y2">y</label>
+    
+                <label for="total2">=</label>
+                <input type="number" id="total2" autocomplete="off">
+            </div>
+            <h3>Ditanya :</h3>
+            <div class="soal">
+                <h2>Z = 8x + 3y</h2>
+            </div>
+            <button id="submit">Hitung</button>
+        </div>
+        <div class="row-step x">
+            <h3>Eleminasi X</h3>
+            <div class="eleminasi-x">
+
+            </div>
+        </div>
+        <div class="row-step y">
+            <h3>Eleminasi Y</h3>
+            <div class="eleminasi-y">
+
+            </div>
+        </div>
+        <div class="row-step z">
+            <h3>Subtitusi</h3>
+            <div class="subtitusi">
+
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+     <h4>Kelompok 7 - Devaldy <span></span> James <span></span> Enggelina</h4>
+    </div>
+    <script>
+        document.getElementById('submit').addEventListener('click', function(){
+            if(document.getElementById('x1').value==''||document.getElementById('y1').value==''||document.getElementById('total1').value==''||document.getElementById('x2').value==''||document.getElementById('y2').value==''||document.getElementById('total2').value==''){
+                alert('Masih ada yang kosong')
+            }else{
+                hitung()
+            }
+        })
+        function hitung(){
+
+            let x1 = parseInt(document.getElementById('x1').value);
+            let y1 = parseInt(document.getElementById('y1').value);
+            let total1 = parseInt(document.getElementById('total1').value);
+            let x2 = parseInt(document.getElementById('x2').value);
+            let y2 = parseInt(document.getElementById('y2').value);
+            let total2 = parseInt(document.getElementById('total2').value);
+            
+            // Eleminasi X
+            // Kali persamaan pertama
+            const kaliX1 = []
+            kaliX1.push(x1*x2)//[0] 9x3 = 27
+            kaliX1.push(y1*x2)//[1] 4x3 = 12
+            kaliX1.push(total1*x2)//[2] 300x3 = 900
+            console.log(kaliX1)
+
+            // Kali persamaan kedua
+            const kaliX2 = []
+            kaliX2.push(x2*x1)//[0] 3x9 = 27
+            kaliX2.push(y2*x1)//[1] 5x9 = 45
+            kaliX2.push(total2*x1)//[2] 250x9 = 2250
+            console.log(kaliX2)
+
+            // Kurang
+            const kurangX = []
+            kurangX.push(kaliX1[1]-kaliX2[1])//[0] 12-45 = -33
+            kurangX.push(kaliX1[2]-kaliX2[2])//[1] 900 - 2250 = -1350
+            console.log(kurangX)
+
+            // Bagi
+            const Y = kurangX[1]/kurangX[0]//-1350 : -33 = 40.91
+            console.log('Y = '+Y)// y = 40.91
+
+            // Eleminasi Y
+            // Kali persamaan pertama
+            const kaliY1 = []
+            kaliY1.push(x1*y2)//[0] 9x5 = 45
+            kaliY1.push(y1*y2)//[1] 4x5 = 20
+            kaliY1.push(total1*y2)//[2] 300x5 = 1500
+            console.log(kaliY1)
+
+            // Kali persamaan kedua
+            const kaliY2 = []
+            kaliY2.push(x2*y1)//[0] 3x4 = 12
+            kaliY2.push(y2*y1)//[1] 5x4 = 20
+            kaliY2.push(total2*y1)//[2] 250x4 = 1000
+            console.log(kaliY2)
+
+            // kurang
+            const kurangY = []
+            kurangY.push(kaliY1[0]-kaliY2[0])//[0] 45-12 = 33
+            kurangY.push(kaliY1[2]-kaliY2[2])//[1] 1500-1000 = 500
+            console.log(kurangY)
+
+            // Bagi
+            const X = kurangY[1]/kurangY[0]// 500:33 = 15.15
+            console.log('X = '+X)// x = 15.15
+
+            // Jumlah
+            const Z = (8*X) + (3*Y)// 121.21 + 122.72 = 243.9
+            console.log('Z = '+Z)// 243.9
+
+            document.querySelector('.x').style.position = 'relative'
+            document.querySelector('.x').style.opacity = '1'
+            document.querySelector('.eleminasi-x').innerHTML = 
+            `
+            <p>${x1}x + ${y1}y = ${total1} x ${x2}</p>
+            <p>${x2}x + ${y2}y = ${total2} x ${x1}</p>
+            <hr>
+            <p>${kaliX1[0]}x + ${kaliX1[1]}y = ${kaliX1[2]}</p>
+            <p>${kaliX2[0]}x + ${kaliX2[1]}y = ${kaliX2[2]}</p>
+            <hr>
+            <p>${kurangX[0]}y = ${kurangX[1]}</p>
+            <hr>
+            <p>y = ${kurangX[1]}/${kurangX[0]}</p>
+            <p class="hasil-y">Y = ${Y.toFixed(2)}</p>
+            `
+            document.querySelector('.y').style.position = 'relative'
+            document.querySelector('.y').style.opacity = '1'
+            document.querySelector('.eleminasi-y').innerHTML = 
+            `
+            <p>${x1}x + ${y1}y = ${total1} x ${y2}</p>
+            <p>${x2}x + ${y2}y = ${total2} x ${y1}</p>
+            <hr>
+            <p>${kaliY1[0]}x + ${kaliY1[1]}y = ${kaliY1[2]}</p>
+            <p>${kaliY2[0]}x + ${kaliY2[1]}y = ${kaliY2[2]}</p>
+            <hr>
+            <p>${kurangY[0]}y = ${kurangY[1]}</p>
+            <hr>
+            <p>y = ${kurangY[1]}/${kurangY[0]}</p>
+            <p class="hasil-x">X = ${X.toFixed(2)}</p>
+            `
+
+            document.querySelector('.z').style.position = 'relative'
+            document.querySelector('.z').style.opacity = '1'
+            document.querySelector('.subtitusi').innerHTML = 
+            `
+            <p>Z = 8 x ${X} + 3 x ${Y}</p>
+            <p>Z = ${8*X} + ${3*Y}</p>
+            <p class="hasil-z">Z = ${Z.toFixed(1)}</p>
+            `
+        }
+
+    </script>
+</body>
+</html>

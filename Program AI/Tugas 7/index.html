@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TUGAS AI 6</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Dosis');
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Dosis';
+    }
+    html, body{
+        height: 100vh;
+        background-color: #002B5B;
+        overflow-x: hidden;
+        gap: 5px;
+    }
+    h1{
+        color: #fff;
+    }
+    .container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 1em;
+    }
+
+    .soal{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .row-soal{
+        width: 655px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        background-color: #fff;
+        padding: 1em;
+        border-radius: 10px;
+    }
+    p{
+        font-size: 18px;
+        font-weight: bold;
+    }
+    input{
+        width: 70px;
+        outline: none;
+        padding: 5px 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 18px;
+        text-align: center;
+    }
+    input:focus{
+        border: 1px solid #256D85;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button{
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number]{
+        -moz-appearance: textfield;
+    }
+    .row-tabel{
+        width: 30%;
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .btn_hitung{
+        background-color: #256D85;
+        color: #fcfcfc;
+        border: 1px solid transparent;
+        font-size: 18px;
+        padding: 10px;
+        border-radius: 10px;
+        transition: 0.5s;
+    }
+    .btn_hitung:hover{
+        cursor: pointer;
+        background-color: #3c8da8;
+        transform: scale(1.02);
+    }
+    .btn_reset{
+        background-color: #ff6347;
+        color: #fcfcfc;
+        border: 1px solid transparent;
+        font-size: 18px;
+        padding: 10px;
+        border-radius: 10px;
+        transition: 0.5s;
+    }
+    .btn_reset:hover{
+        cursor: pointer;
+        background-color: #ee5439;
+        transform: scale(1.02);
+    }
+    .table-data{
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .table-data thead{
+        background-color: #256D85;
+        color: #fff;
+    }
+    .table-data thead tr th:nth-child(1),
+    .table-data tbody tr td:nth-child(1){
+        border-right: 1px solid #000;
+    }
+    .table-data thead tr th,
+    .table-data tbody tr:not(:last-child) td{
+        border-bottom: 1px solid #000;
+    }
+    .table-data tbody tr:nth-child(even){
+        background-color: #c6e2eb;
+    }
+    .table-data th,td{
+        padding: 10px;
+    }
+
+    .hitung, .hitung-double, .hitung-a, .hitung-b, .hasil{
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 1em;
+    }
+
+    .table{
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .table-answer{
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .table-answer thead{
+        background-color: #256D85;
+        color: #fff;
+    }
+    .table-answer thead tr th:nth-child(1),
+    .table-answer tbody tr td:nth-child(1),
+    .table-answer thead tr th:nth-child(2),
+    .table-answer tbody tr td:nth-child(2),
+    .table-answer thead tr th:nth-child(3),
+    .table-answer tbody tr td:nth-child(3),
+    .table-answer thead tr th:nth-child(4),
+    .table-answer tbody tr td:nth-child(4),
+    .table-answer thead tr th:nth-child(5),
+    .table-answer tbody tr td:nth-child(5){
+        border-right: 1px solid #000;
+    }
+    .table-answer thead tr th,
+    .table-answer tbody tr:not(:last-child) td{
+        border-bottom: 1px solid #000;
+    }
+    .table-answer tbody tr:nth-child(even){
+        background-color: #c6e2eb;
+    }
+    .table-answer th,td{
+        padding: 10px;
+    }
+    .col{
+        position: absolute;
+        opacity: 0;
+        transition: 0.5s;
+    }
+
+    .footer{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        text-align: center;
+        line-height: 2em;
+    }
+    .footer span{
+        width: 5px;
+        height: 5px;
+        background-color: #fff;
+        display: inline-block;
+        border-radius: 50%;
+    }
+</style>   
+<body>
+    <div class="soal">
+        <h1>Double Smooth</h1>
+        <div class="row-soal">
+            <p>Soal</p>
+            <p>Temukan nilai ramalan minggu ke 6 dengan aplha <input type="number" id="alpha"> menggunakan simple smooth.</p>
+            <p>Lalu buatlah hasil tabel untuk motode yang ada</p>
+            <button class="btn_hitung">Hitung</button>
+            <button disabled class="btn_reset">Reset</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row-tabel">
+            <table class="table-data">
+                <thead>
+                    <tr>
+                        <th>Minggu</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>13</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>24</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>33</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>21</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>22</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col hitung"></div>
+        <div class="col hitung-double"></div>
+        <div class="col hitung-a"></div>
+        <div class="col hitung-b"></div>
+        <div class="col hasil"></div>
+        <div class="col table">
+            <table class="table-answer">
+                <thead>
+                    <tr>
+                        <th>Minggu</th>
+                        <th>Data Aktual (Xt)</th>
+                        <th>Nilai Ramalan(S't)</th>
+                        <th>Nilai S''t</th>
+                        <th>Nilai At</th>
+                        <th>Nilai Bt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="footer">
+        <h4>Kelompok 7 <br>Devaldy <span></span> James <span></span> Enggelina</h4>
+    </div>
+
+    <script>
+        
+        document.querySelector('.btn_hitung').addEventListener('click', function(){
+            if(document.querySelector('#alpha').value == ''){
+                alert('Masukan Nilai Alpha')
+            }else{
+                document.querySelector('.btn_reset').disabled = false
+                hitung()
+            }
+        })
+
+        document.querySelector('.btn_reset').addEventListener('click', function(){
+            window.location.reload()
+        })
+
+        function hitung(){
+            // Ambil Nilai alpha dari input box
+            let alpha = parseFloat(document.querySelector('#alpha').value)
+            // Set Up Data dan variabel
+            const data = [13,24,33,21,22] //set array dengan total index 0 - 4
+            
+            var nilai_periode_simple = data[0] //set nilai ramalan dengan nilai awal 13
+            var nilai_periode_double = data[0]
+            var data_pos_simple = []
+            var data_pos_double = []
+            var data_pos_a = []
+            var data_pos_b = []
+            var a5
+            var b5
+            var no = 1
+            var no_tbl = 1
+            // Start Pengulangan
+            for(var i = 0; i < data.length; i++){
+                // Rumus Utama
+                var hitung_simple = ((alpha) * data[i]) + (1 - alpha) * nilai_periode_simple
+                
+                document.querySelector('.hitung').style.opacity = '1'
+                document.querySelector('.hitung').style.position = 'relative'
+                document.querySelector('.hitung').innerHTML += 
+                `
+                <p>S'${no} = (${alpha}) ${data[i]} + (${1 - alpha}) ${nilai_periode_simple.toFixed(1)}<span style='color: tomato;'> = ${hitung_simple.toFixed(2)}</span></p>
+                `
+        
+                nilai_periode_simple = hitung_simple // Mengubah Nilai Ramalan dari nilai variabel hitung
+
+                data_pos_simple[i] = hitung_simple.toFixed(2)
+                
+                // Rumus double
+                var hitung_double = ((alpha) * data_pos_simple[i] + (1 - alpha) * nilai_periode_double)
+                var hitung_a = (2 * data_pos_simple[i]) - hitung_double
+                var hitung_b = (alpha/(1 - alpha)) * (hitung_simple - hitung_double)
+                data_pos_double[i] = hitung_double.toFixed(2)
+                data_pos_a[i] = hitung_a.toFixed(2)
+                data_pos_b[i] = hitung_b.toFixed(2)
+                
+                document.querySelector('.hitung-double').style.opacity = '1'
+                document.querySelector('.hitung-double').style.position = 'relative'
+                document.querySelector('.hitung-double').innerHTML +=
+                `
+                <p>S''${no} = (${alpha}) ${data_pos_simple[i]} + (${1 - alpha}) ${nilai_periode_double.toFixed(1)}</p>
+                <p>&emsp;&nbsp; = ${((alpha) * data_pos_simple[i]).toFixed(2)} + ${((1 - alpha) * nilai_periode_double).toFixed(2)}<span style='color: tomato;'> = ${hitung_double.toFixed(2)}</span></p>
+                `
+                
+                nilai_periode_double = hitung_double
+
+                document.querySelector('.hitung-a').style.opacity = '1'
+                document.querySelector('.hitung-a').style.position = 'relative'
+                document.querySelector('.hitung-a').innerHTML +=
+                `
+                <p>A'${no} = 2(${data_pos_simple[i]} - ${hitung_double.toFixed(2)})<span style='color: tomato;'> = ${hitung_a.toFixed(2)}</span></p>
+                `
+                document.querySelector('.hitung-b').style.opacity = '1'
+                document.querySelector('.hitung-b').style.position = 'relative'
+                document.querySelector('.hitung-b').innerHTML +=
+                `
+                <p>B'${no} = (${alpha}/${1 - alpha}) * (${hitung_simple.toFixed(2)} - ${hitung_double.toFixed(2)})<span style='color: tomato;'> = ${hitung_b.toFixed(2)}</span></p>
+                `
+                no++
+                a5 = hitung_a
+                b5 = hitung_b
+            }
+            var hasil = a5 + b5
+            document.querySelector('.hasil').style.opacity = '1'
+            document.querySelector('.hasil').style.position = 'relative'
+            document.querySelector('.hasil').innerHTML +=
+            `
+            <p>St = ${a5.toFixed(2)} + ${b5.toFixed(2)}<span style='color: tomato;'> = ${hasil.toFixed(2)}</span></p>
+            `
+
+            document.querySelector('.table').style.opacity = '1'
+            document.querySelector('.table').style.position = 'relative'
+            let tbody = document.querySelector('.table-answer tbody')
+            for(var j = 0; j < 6; j++){
+                let tr = document.createElement('tr')
+                let td_no = document.createElement('td')
+                let td_data_aktual = document.createElement('td')
+                let td_nilai_ramalan = document.createElement('td')
+                let td_nilai_double = document.createElement('td')
+                let td_nilai_a = document.createElement('td')
+                let td_nilai_b = document.createElement('td')
+                td_no.innerHTML += `${no_tbl++}`
+                td_data_aktual.innerHTML += `${j<5?data[j]:''}`
+                td_nilai_ramalan.innerHTML += `${j<5?data_pos_simple[j]:hasil.toFixed(2)}`
+                td_nilai_double.innerHTML += `${j<5?data_pos_double[j]:''}`
+                td_nilai_a.innerHTML += `${j<5?data_pos_a[j]:''}`
+                td_nilai_b.innerHTML += `${j<5?data_pos_b[j]:''}`
+                tr.appendChild(td_no)
+                tr.appendChild(td_data_aktual)
+                tr.appendChild(td_nilai_ramalan)
+                tr.appendChild(td_nilai_double)
+                tr.appendChild(td_nilai_a)
+                tr.appendChild(td_nilai_b)
+                tbody.appendChild(tr)
+            }
+        }
+    </script>
+</body>
+</html>

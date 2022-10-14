@@ -297,10 +297,10 @@
             // Set Up Data dan variabel
             const data = [13,24,33,21,22] //set array dengan total index 0 - 4
             
-            var nilai_periode_simple = data[0] //set nilai ramalan dengan nilai awal 13
-            var nilai_periode_double = data[0]
-            var data_pos_simple = []
-            var data_pos_double = []
+            var nilai_periode_1 = data[0] //set nilai ramalan dengan nilai awal 13
+            var nilai_periode_2 = data[0]
+            var data_pos_periode_1 = []
+            var data_pos_periode_2 = []
             var data_pos_a = []
             var data_pos_b = []
             var a5
@@ -309,25 +309,27 @@
             var no_tbl = 1
             // Start Pengulangan
             for(var i = 0; i < data.length; i++){
-                // Rumus Utama
-                var hitung_simple = ((alpha) * data[i]) + (1 - alpha) * nilai_periode_simple
+                // Rumus S't (periode 1)
+                var hitung_periode_1 = ((alpha) * data[i]) + (1 - alpha) * nilai_periode_1
                 
                 document.querySelector('.hitung').style.opacity = '1'
                 document.querySelector('.hitung').style.position = 'relative'
                 document.querySelector('.hitung').innerHTML += 
                 `
-                <p>S'${no} = (${alpha}) ${data[i]} + (${1 - alpha}) ${nilai_periode_simple.toFixed(1)}<span style='color: tomato;'> = ${hitung_simple.toFixed(2)}</span></p>
+                <p>S'${no} = (${alpha}) ${data[i]} + (${1 - alpha}) ${nilai_periode_1.toFixed(1)}<span style='color: tomato;'> = ${hitung_periode_1.toFixed(2)}</span></p>
                 `
         
-                nilai_periode_simple = hitung_simple // Mengubah Nilai Ramalan dari nilai variabel hitung
+                nilai_periode_1 = hitung_periode_1 // Mengubah Nilai Ramalan dari nilai variabel hitung
 
-                data_pos_simple[i] = hitung_simple.toFixed(2)
+                data_pos_periode_1[i] = hitung_periode_1.toFixed(2) // Menyimpan value hitung ke dalam array
                 
-                // Rumus double
-                var hitung_double = ((alpha) * hitung_simple + (1 - alpha) * nilai_periode_double)
-                var hitung_a = (2 * data_pos_simple[i]) - hitung_double
-                var hitung_b = (alpha/(1 - alpha)) * (hitung_simple - hitung_double)
-                data_pos_double[i] = hitung_double.toFixed(2)
+                // Rumus S''t (periode 2)
+                var hitung_periode_2 = ((alpha) * hitung_periode_1 + (1 - alpha) * nilai_periode_2)
+                // Rumus a
+                var hitung_a = (2 * data_pos_periode_1[i]) - hitung_periode_2
+                // Rumus b
+                var hitung_b = (alpha/(1 - alpha)) * (hitung_periode_1 - hitung_periode_2)
+                data_pos_periode_2[i] = hitung_periode_2.toFixed(2)
                 data_pos_a[i] = hitung_a.toFixed(2)
                 data_pos_b[i] = hitung_b.toFixed(2)
                 
@@ -335,23 +337,23 @@
                 document.querySelector('.hitung-double').style.position = 'relative'
                 document.querySelector('.hitung-double').innerHTML +=
                 `
-                <p>S''${no} = (${alpha}) ${hitung_simple.toFixed(2)} + (${1 - alpha}) ${nilai_periode_double.toFixed(1)}</p>
-                <p>&emsp;&nbsp; = ${((alpha) * hitung_simple).toFixed(2)} + ${((1 - alpha) * nilai_periode_double).toFixed(2)}<span style='color: tomato;'> = ${hitung_double.toFixed(2)}</span></p>
+                <p>S''${no} = (${alpha}) ${hitung_periode_1.toFixed(2)} + (${1 - alpha}) ${nilai_periode_2.toFixed(1)}</p>
+                <p>&emsp;&nbsp; = ${((alpha) * hitung_periode_1).toFixed(2)} + ${((1 - alpha) * nilai_periode_2).toFixed(2)}<span style='color: tomato;'> = ${hitung_periode_2.toFixed(2)}</span></p>
                 `
                 
-                nilai_periode_double = hitung_double
+                nilai_periode_2 = hitung_periode_2
 
                 document.querySelector('.hitung-a').style.opacity = '1'
                 document.querySelector('.hitung-a').style.position = 'relative'
                 document.querySelector('.hitung-a').innerHTML +=
                 `
-                <p>A'${no} = 2(${hitung_simple.toFixed(2)} - ${hitung_double.toFixed(2)})<span style='color: tomato;'> = ${hitung_a.toFixed(2)}</span></p>
+                <p>A'${no} = 2(${hitung_periode_1.toFixed(2)} - ${hitung_periode_2.toFixed(2)})<span style='color: tomato;'> = ${hitung_a.toFixed(2)}</span></p>
                 `
                 document.querySelector('.hitung-b').style.opacity = '1'
                 document.querySelector('.hitung-b').style.position = 'relative'
                 document.querySelector('.hitung-b').innerHTML +=
                 `
-                <p>B'${no} = (${alpha}/${1 - alpha}) * (${hitung_simple.toFixed(2)} - ${hitung_double.toFixed(2)})<span style='color: tomato;'> = ${hitung_b.toFixed(2)}</span></p>
+                <p>B'${no} = (${alpha}/${1 - alpha}) * (${hitung_periode_1.toFixed(2)} - ${hitung_periode_2.toFixed(2)})<span style='color: tomato;'> = ${hitung_b.toFixed(2)}</span></p>
                 `
                 no++
                 a5 = hitung_a
@@ -373,19 +375,19 @@
                 let td_no = document.createElement('td')
                 let td_data_aktual = document.createElement('td')
                 let td_nilai_ramalan = document.createElement('td')
-                let td_nilai_double = document.createElement('td')
+                let td_nilai_periode_2 = document.createElement('td')
                 let td_nilai_a = document.createElement('td')
                 let td_nilai_b = document.createElement('td')
                 td_no.innerHTML += `${no_tbl++}`
                 td_data_aktual.innerHTML += `${j<5?data[j]:''}`
-                td_nilai_ramalan.innerHTML += `${j<5?data_pos_simple[j]:hasil.toFixed(2)}`
-                td_nilai_double.innerHTML += `${j<5?data_pos_double[j]:''}`
+                td_nilai_ramalan.innerHTML += `${j<5?data_pos_periode_1[j]:hasil.toFixed(2)}`
+                td_nilai_periode_2.innerHTML += `${j<5?data_pos_periode_2[j]:''}`
                 td_nilai_a.innerHTML += `${j<5?data_pos_a[j]:''}`
                 td_nilai_b.innerHTML += `${j<5?data_pos_b[j]:''}`
                 tr.appendChild(td_no)
                 tr.appendChild(td_data_aktual)
                 tr.appendChild(td_nilai_ramalan)
-                tr.appendChild(td_nilai_double)
+                tr.appendChild(td_nilai_periode_2)
                 tr.appendChild(td_nilai_a)
                 tr.appendChild(td_nilai_b)
                 tbody.appendChild(tr)

@@ -324,7 +324,7 @@
                 data_pos_simple[i] = hitung_simple.toFixed(2)
                 
                 // Rumus double
-                var hitung_double = ((alpha) * data_pos_simple[i] + (1 - alpha) * nilai_periode_double)
+                var hitung_double = ((alpha) * hitung_simple + (1 - alpha) * nilai_periode_double)
                 var hitung_a = (2 * data_pos_simple[i]) - hitung_double
                 var hitung_b = (alpha/(1 - alpha)) * (hitung_simple - hitung_double)
                 data_pos_double[i] = hitung_double.toFixed(2)
@@ -335,8 +335,8 @@
                 document.querySelector('.hitung-double').style.position = 'relative'
                 document.querySelector('.hitung-double').innerHTML +=
                 `
-                <p>S''${no} = (${alpha}) ${data_pos_simple[i]} + (${1 - alpha}) ${nilai_periode_double.toFixed(1)}</p>
-                <p>&emsp;&nbsp; = ${((alpha) * data_pos_simple[i]).toFixed(2)} + ${((1 - alpha) * nilai_periode_double).toFixed(2)}<span style='color: tomato;'> = ${hitung_double.toFixed(2)}</span></p>
+                <p>S''${no} = (${alpha}) ${hitung_simple.toFixed(2)} + (${1 - alpha}) ${nilai_periode_double.toFixed(1)}</p>
+                <p>&emsp;&nbsp; = ${((alpha) * hitung_simple).toFixed(2)} + ${((1 - alpha) * nilai_periode_double).toFixed(2)}<span style='color: tomato;'> = ${hitung_double.toFixed(2)}</span></p>
                 `
                 
                 nilai_periode_double = hitung_double
@@ -345,7 +345,7 @@
                 document.querySelector('.hitung-a').style.position = 'relative'
                 document.querySelector('.hitung-a').innerHTML +=
                 `
-                <p>A'${no} = 2(${data_pos_simple[i]} - ${hitung_double.toFixed(2)})<span style='color: tomato;'> = ${hitung_a.toFixed(2)}</span></p>
+                <p>A'${no} = 2(${hitung_simple.toFixed(2)} - ${hitung_double.toFixed(2)})<span style='color: tomato;'> = ${hitung_a.toFixed(2)}</span></p>
                 `
                 document.querySelector('.hitung-b').style.opacity = '1'
                 document.querySelector('.hitung-b').style.position = 'relative'

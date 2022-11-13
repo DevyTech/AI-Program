@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weigted Product</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Dosis');
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Dosis';
+    }
+    html, body{
+        height: 100vh;
+        background-color: #002B5B;
+        overflow-x: hidden;
+        gap: 5px;
+    }
+    h1{
+        text-align: center;
+        color: #fff;
+        margin: 20px 0px;
+    }
+    .soal{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .row-soal{
+        width: 655px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        background-color: #fff;
+        padding: 1em 2em;
+        border-radius: 10px;
+    }
+    .row-soal ul li:not(:first-child){
+        margin-top: 1em;
+    }
+    p{
+        font-size: 18px;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    input{
+        width: 30px;
+        outline: none;
+        padding: 5px 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 18px;
+        text-align: center;
+    }
+    input:focus{
+        border: 1px solid #256D85;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button{
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number]{
+        -moz-appearance: textfield;
+    }
+    .btn_hitung{
+        background-color: #256D85;
+        color: #fcfcfc;
+        border: 1px solid transparent;
+        font-size: 18px;
+        padding: 10px;
+        border-radius: 10px;
+        transition: 0.5s;
+    }
+    .btn_hitung:hover{
+        cursor: pointer;
+        background-color: #3c8da8;
+        transform: scale(1.02);
+    }
+    .container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 1em;
+    }
+    .table-data{
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    .col{
+        position: absolute;
+        opacity: 0;
+        transition: 0.5s;
+
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 1em;
+    }
+</style>
+<body>
+    <h1>Weighted Product</h1>
+    <div class="soal">
+        <div class="row-soal">
+            <ul>
+                <li>
+                    <p>Soal</p>
+                    <p>Kita akan memilih restoran yang terbaik dari 3 restoran (Ungke restoran, amin restoran, epi restoran). Dalam memilih restoran terdapat beberapa kriteria. Kriteria : Kualitas Makanan (C1), Harga Makanan (C2), Pelayanan (C3), Suasana (C4) dan Jarak (C5)</p>
+                    <table class="table-data" border="1">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Alternatif</th>
+                                <th colspan="5">Kriteria</th>
+                            </tr>
+                            <tr>
+                                <th>C1</th>
+                                <th>C2</th>
+                                <th>C3</th>
+                                <th>C4</th>
+                                <th>C5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>R1</td>
+                                <td>42</td>
+                                <td>66.000</td>
+                                <td>60</td>
+                                <td>75</td>
+                                <td>2.355</td>
+                            </tr>
+                            <tr>
+                                <td>R2</td>
+                                <td>50</td>
+                                <td>90.000</td>
+                                <td>72</td>
+                                <td>60</td>
+                                <td>1.421</td>
+                            </tr>
+                            <tr>
+                                <td>R3</td>
+                                <td>63</td>
+                                <td>91.500</td>
+                                <td>65</td>
+                                <td>80</td>
+                                <td>2.585</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+                <li>
+                    <p>Input Bobot</p>
+                    <p style="color: tomato; font-size: 14px;margin: 1em 0;">* Bobot [5.Sangat Baik, 4.Baik, 3.Cukup, 2.Buruk, 1.Sangat Buruk]</p>
+                    <p>Bobot(W) : C1 <input type="number" id="w1"> C2 <input type="number" id="w2"> C3 <input type="number" id="w3"> C4 <input type="number" id="w4"> C5 <input type="number" id="w5"></p>
+                </li>
+            </ul>
+            <button class="btn_hitung">Hitung</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="col bagi-kriteria"></div>
+        <div class="col cari-w"></div>
+        <div class="col cari-s"></div>
+        <div class="col cari-v"></div>
+    </div>
+</body>
+<script>
+    // Ketika Tombol diklik akan menjalankan function hitung()
+    document.querySelector('.btn_hitung').addEventListener('click', hitung)
+
+    
+    function hitung(){
+        // TAHAP 1 - Menentukan Bobot
+        // Deklarasi Array Bobot
+        var w = []
+        for(i = 1; i < 6; i++){
+            // Mengambil Nilai Bobot dari InputBox
+            var val = document.getElementById('w'+i.toString()).value
+            // Membuat Data Array objek
+            var bobot = {
+                "id":"C"+i,
+                "bobot":parseInt(val),
+                "kategori":val > 3 ?"plus":"minus" // Tahap 1 - Jika Nilai bobot lebih dari 3 maka kategori=plus jika tidak kategori=minus
+            }
+            // Memasukan objek di menurut posisi terakhir
+            w.push(bobot)
+        }
+        console.log('Tahap 1')
+        console.log(w)
+
+        // TAHAP 2 - Perbaikan bobot
+        // Deklarasi Array Perbaikan bobot
+        var bobotFix = []
+        var set_kriteria_untung = [] //Deklarasi Array kriteria untung
+        var set_kriteria_buruk = [] //Deklarasi Array Kriteria nilai buruk
+        var bagi = w[0]["bobot"]+w[1]["bobot"]+w[2]["bobot"]+w[3]["bobot"]+w[4]["bobot"] //Menghitung total nilai bobot
+        for(j = 0; j < 5; j++){
+            // Memasukan Nilai minus atau plus
+            var bobotNormalisasi
+            console.log(bagi)
+            if(w[j]["kategori"]=="plus"){
+                bobotNormalisasi = w[j]["bobot"]/ parseInt(bagi) * 1
+                set_kriteria_untung.push(w[j]["id"])
+            }else{
+                set_kriteria_buruk.push(w[j]["id"])
+                bobotNormalisasi = w[j]["bobot"]/ parseInt(bagi) * (-1)
+            }
+            // Memasukan nilai array di menurut posisi terakhir
+            bobotFix.push(parseFloat(bobotNormalisasi.toFixed(3)))
+        }
+        console.log('Tahap 2')
+        console.log(bobotFix)
+
+        // TAHAP 3 - Nilai Vektor S dan V
+        var hitungS1 = (Math.pow(42,bobotFix[0])) * (Math.pow(66000,bobotFix[1])) * (Math.pow(60,bobotFix[2])) * (Math.pow(75,bobotFix[3])) * (Math.pow(2355,bobotFix[4]))
+        var hitungS2 = (Math.pow(50,bobotFix[0])) * (Math.pow(90000,bobotFix[1])) * (Math.pow(72,bobotFix[2])) * (Math.pow(60,bobotFix[3])) * (Math.pow(1421,bobotFix[4]))
+        var hitungS3 = (Math.pow(63,bobotFix[0])) * (Math.pow(91500,bobotFix[1])) * (Math.pow(65,bobotFix[2])) * (Math.pow(80,bobotFix[3])) * (Math.pow(2585,bobotFix[4]))
+        console.log('Tahap 3')
+        console.log(hitungS1)
+        console.log(hitungS2)
+        console.log(hitungS3)
+
+        var hitungVi = []
+        hitungVi.push(hitungS1/(hitungS1+hitungS2+hitungS3))
+        hitungVi.push(hitungS2/(hitungS1+hitungS2+hitungS3))
+        hitungVi.push(hitungS3/(hitungS1+hitungS2+hitungS3))
+        console.log(hitungVi)
+
+        // Mencari Nilai Terbesar
+        var Terbesar = 0
+        for(index = 0; index < hitungVi.length; index++){
+            if(hitungVi[index] > Terbesar){
+                Terbesar = hitungVi[index]
+            }
+        }
+        console.log("Nilai Terbesar : "+Terbesar)
+
+        // Menampilkan Tahap 1
+        document.querySelector('.bagi-kriteria').style.opacity = '1'
+        document.querySelector('.bagi-kriteria').style.position = 'relative'
+        document.querySelector('.bagi-kriteria').innerHTML =
+        `
+        <p>Pembagian Kriteria</p>
+        <br>
+        <p>1. ${set_kriteria_untung} adalah Keuntungan (+)</p>
+        <p>2. ${set_kriteria_buruk} adalah Nilai Buruk (-)</p>
+        `
+        document.querySelector('.cari-w').style.opacity = '1'
+        document.querySelector('.cari-w').style.position = 'relative'
+        document.querySelector('.cari-w').innerHTML =
+        `
+        <p>Mencari dan Normalisasi Nilai</p>
+        <br>
+        <p>W1 = ${w[0]["bobot"]} / ${bagi} = ${bobotFix[0]}</p>
+        <p>W2 = ${w[1]["bobot"]} / ${bagi} = ${bobotFix[1]}</p>
+        <p>W3 = ${w[2]["bobot"]} / ${bagi} = ${bobotFix[2]}</p>
+        <p>W4 = ${w[3]["bobot"]} / ${bagi} = ${bobotFix[3]}</p>
+        <p>W5 = ${w[4]["bobot"]} / ${bagi} = ${bobotFix[4]}</p>
+        `
+        document.querySelector('.cari-s').style.opacity = '1'
+        document.querySelector('.cari-s').style.position = 'relative'
+        document.querySelector('.cari-s').innerHTML =
+        `
+        <p>Mencari Nilai S Ternormalisasi</p>
+        <br>
+        <p>S1 = (${42} ^ ${bobotFix[0]}) (${66000} ^ ${bobotFix[1]}) (${60} ^ ${bobotFix[2]}) (${75} ^ ${bobotFix[3]}) (${2355} ^ ${bobotFix[4]}) = ${hitungS1.toFixed(5)}</p>
+        <p>S2 = (${50} ^ ${bobotFix[0]}) (${90000} ^ ${bobotFix[1]}) (${72} ^ ${bobotFix[2]}) (${60} ^ ${bobotFix[3]}) (${1421} ^ ${bobotFix[4]}) = ${hitungS2.toFixed(5)}</p>
+        <p>S3 = (${63} ^ ${bobotFix[0]}) (${91500} ^ ${bobotFix[1]}) (${65} ^ ${bobotFix[2]}) (${80} ^ ${bobotFix[3]}) (${2585} ^ ${bobotFix[4]}) = ${hitungS3.toFixed(5)}</p>
+        `
+        document.querySelector('.cari-v').style.opacity = '1'
+        document.querySelector('.cari-v').style.position = 'relative'
+        document.querySelector('.cari-v').innerHTML =
+        `
+        <p>Hasil Perhitungan V</p>
+        <br>
+        <p>V1 = ${hitungS1} / (${hitungS1} + ${hitungS2} + ${hitungS3}) = ${hitungVi[0]}</p>
+        <p>V2 = ${hitungS2} / (${hitungS1} + ${hitungS2} + ${hitungS3}) = ${hitungVi[1]}</p>
+        <p>V3 = ${hitungS3} / (${hitungS1} + ${hitungS2} + ${hitungS3}) = ${hitungVi[2]}</p>
+        <br>
+        <center><h2>Nilai Terbesar Adalah = ${Terbesar}</h2></center>
+        `
+    }
+</script>
+</html>
